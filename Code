@@ -1,0 +1,119 @@
+import tkinter as tk
+from tkinter import ttk, filedialog, simpledialog, messagebox
+import pandas as pd
+from openpyxl import load_workbook
+from Show_activelinks import display_active_links
+
+
+class SheetDialog(tk.Toplevel):
+    def __init__(self, parent, sheet_names):
+        super().__init__(parent)
+        self.title("Select Sheet")
+        self.selected_sheet = None
+
+        self.sheet_listbox = tk.Listbox(self, selectmode=tk.SINGLE, exportselection=0)
+        for sheet_name in sheet_names:
+            self.sheet_listbox.insert(tk.END, sheet_name)
+        self.sheet_listbox.pack(padx=10, pady=10)
+
+        select_button = ttk.Button(self, text="Select Sheet", command=self.select_sheet)
+        select_button.pack(pady=10)
+
+    def select_sheet(self):
+        selected_index = self.sheet_listbox.curselection()
+        if selected_index:
+            self.selected_sheet = self.sheet_listbox.get(selected_index)
+        self.destroy()
+
+
+def browse_file():
+    file_path = filedialog.askopenfilename(
+        filetypes=[("Excel files", "*.xlsx;*.xls")],
+        title="Select an Excel file"
+    )
+    file_label.config(text="Selected File: " + file_path)
+    show_options(file_path)
+
+
+def show_options(file_path):
+    clear_screen()
+
+    # Display the selected file path dynamically
+    selected_file_label = tk.Label(root, text="Selected File: " + file_path)
+    selected_file_label.pack(pady=10)
+
+    # Get sheet names from the Excel file
+    try:
+        excel_file = pd.ExcelFile(file_path)
+        sheet_names = excel_file.sheet_names
+    except Exception as e:
+        tk.messagebox.showerror("Error", f"An error occurred while reading sheet names: {e}")
+        return
+
+    # Ask the user to choose a sheet using a custom dialog
+    if sheet_names:
+        dialog = SheetDialog(root, sheet_names=sheet_names)
+        root.wait_window(dialog)
+        selected_sheet = dialog.selected_sheet
+
+        # Continue only if the user selected a sheet
+        if selected_sheet:
+            # Create new button
+            show_activity_button = ttk.Button(root, text="Display active and inactive links",
+                                              command=lambda: display_and_show_links(file_path, selected_sheet))
+            show_activity_button.pack(pady=10)
+    else:
+        tk.messagebox.showinfo("Info", "No sheets found in the Excel file.")
+
+
+def display_and_show_links(file_path, sheet_name):
+    result = display_active_links(file_path, sheet_name)
+    if isinstance(result, pd.DataFrame):
+        # Display link status on Tkinter
+        tk.messagebox.showinfo("Link Status", f"DataFrame with link status:\n\n{result}")
+
+        # Write link status to Excel under "Link Status" column
+        try:
+            writer = pd.ExcelWriter(file_path, engine='openpyxl')
+            writer.book = load_workbook(file_path)
+            writer.sheets = dict((ws.title, ws) for ws in writer.book.worksheets)
+            result.insert(2, "Link Status", result["Status"])  # Insert a new column for "Link Status"
+            result.drop("Status", axis=1, inplace=True)  # Drop the original "Status" column
+            result.to_excel(writer, sheet_name=sheet_name, index=False, header=True)
+            writer.save()
+        except Exception as e:
+            tk.messagebox.showerror("Error", f"An error occurred while saving the updated DataFrame: {e}")
+    else:
+        tk.messagebox.showerror("Error", result)
+
+
+def clear_screen():
+    for widget in root.winfo_children():
+        widget.destroy()
+
+
+# creates the window
+root = tk.Tk()
+
+# sets the window size based on the user's screen size
+width = root.winfo_screenwidth()
+height = root.winfo_screenheight()
+
+# sets the window size
+root.geometry("%dx%d" % (width, height))
+
+# names the window
+root.title("Excel Automation")
+
+# Label for user instruction
+instruction_label = tk.Label(root, text="Enter an Excel file")
+instruction_label.pack(pady=10)
+
+# Button for browse file
+browse_button = ttk.Button(root, text="📂 Browse", command=browse_file)
+browse_button.pack(pady=10)
+
+file_label = tk.Label(root, text="Selected File: None")
+file_label.pack(pady=10)
+
+root.mainloop()
