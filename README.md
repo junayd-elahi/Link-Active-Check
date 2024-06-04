@@ -41,13 +41,3 @@ Check complete: <br/>
 Excel Result(This will always put the results in column C this can be changed in the code look for result.insert):  <br/>
 <img src="https://i.imgur.com/imzmYC5.png" height="80%" width="80%" alt="Link Active Steps"/>
 </p>
-
-<!--
- ```diff
-- text in red
-+ text in green
-! text in orange
-# text in gray
-@@ text in purple (and bold)@@
-```
---!># Link-Active-Check
