@@ -29,7 +29,7 @@ A Python tool to check the status of URLs inside Excel files. Useful for verifyi
 
 ```
 Link-Active-Check/
-├── link_checker_commented.py   # Cleaned & commented script
+├── link_checker.py   # Cleaned & commented script
 ├── sample_input.xlsx           # Excel file with test URLs
 └── README.md
 ```
