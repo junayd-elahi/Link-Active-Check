@@ -25,17 +25,6 @@ A Python tool to check the status of URLs inside Excel files. Useful for verifyi
 
 ---
 
-## 📂 Folder Structure
-
-```
-Link-Active-Check/
-├── link_checker.py   # Cleaned & commented script
-├── sample_input.xlsx           # Excel file with test URLs
-└── README.md
-```
-
----
-
 ## ▶️ How to Use
 
 1. Clone the repository:
