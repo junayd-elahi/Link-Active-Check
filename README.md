@@ -1,43 +1,88 @@
-Link Activity Check
+# 🔗 Excel Link Activity Checker
 
-<h2>Description</h2>
-Puerly made to save time when dealing with alot of links from various websites that are constantly changing, for example in Rightmove or zoopla if you have data stored in a excel or google sheet file and want to identify which ones are currently on the market this is a quick and easy way to identify which links are worth looking at. 
-<br />
+A Python tool to check the status of URLs inside Excel files. Useful for verifying hundreds of hyperlinks in marketing sheets, stock registers, or SEO audits.
 
+---
 
-<h2>Languages and Utilities Used</h2>
+## 📌 Features
 
-- <br>Python</b> 
-  
+- Reads Excel files and scans URLs in column B
+- Writes "Link is Active" or "Link is Inactive" in column C
+- Handles redirects (301/302) and broken links
+- Skips empty cells automatically
+- Multithreaded for fast checking
+- Supports unlimited files via config list
 
-<h2>libraries Used </h2>
--Openpyxl
--requests 
--tkinter, filedialog,Tk and messagebox
+---
 
-<h2>Program walk-through:</h2>
+## 🛠 Tech Stack
 
-<p align="center">
-Launch the utility: <br/>
-<img src="https://i.imgur.com/QCnkQAJ.png" height="80%" width="80%" alt="Link Active Steps"/>
-<br />
-<br />
-Selecting a Excel File:  <br/>
-<img src="https://i.imgur.com/9rNw0oR.pngg" height="80%" width="80%" alt="Link Active Steps"/>
-<br />
-<br />
-Selecting a File within that sheet: <br/>
-<img src="https://i.imgur.com/kn1mKDq.png" height="80%" width="80%" alt="Link Active Steps"/>
-<br />
-<br />
-Confirm the action and wait for process to complete (may take some time):  <br/>
-<img src="https://i.imgur.com/DuYg5tM.png" height="80%" width="80%" alt="Link Active Steps"/>
-<br />
-<br />
-Check complete: <br/>
-<img src="https://i.imgur.com/y2ErI96.png" height="80%" width="80%" alt="Link Active Steps"/>
-<br />
-<br />
-Excel Result(This will always put the results in column C this can be changed in the code look for result.insert):  <br/>
-<img src="https://i.imgur.com/imzmYC5.png" height="80%" width="80%" alt="Link Active Steps"/>
-</p>
+- **Python 3.8+**
+- `openpyxl` – Excel file handling  
+- `requests` – HTTP/HTTPS checking  
+- `tqdm` – Progress bars  
+- `concurrent.futures` – Threading
+
+---
+
+## 📂 Folder Structure
+
+```
+Link-Active-Check/
+├── link_checker_commented.py   # Cleaned & commented script
+├── sample_input.xlsx           # Excel file with test URLs
+└── README.md
+```
+
+---
+
+## ▶️ How to Use
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/junayd-elahi/Link-Active-Check.git
+   cd Link-Active-Check
+   ```
+
+2. Install required libraries:
+   ```bash
+   pip install openpyxl requests tqdm
+   ```
+
+3. Replace file paths in `configurations = [...]`:
+   ```python
+   configurations = [
+       {'file_path': r"path\\to\\your\\excel_file1.xlsx"},
+       {'file_path': r"path\\to\\your\\excel_file2.xlsx"},
+   ]
+   ```
+
+4. Run the script:
+   ```bash
+   python link_checker_commented.py
+   ```
+
+---
+
+## 🧪 Excel File Format
+
+- **Column B (2)** → URL to be checked
+- **Column C (3)** → Script writes status result
+- Script scans **Sheet 2 and 3** only (index 1 and 2)
+
+---
+
+## 🚀 Example Output
+
+| Link                        | Status          |
+|-----------------------------|------------------|
+| https://www.google.com      | Link is Active   |
+| https://badlink.fakeurl     | Link is Inactive |
+
+---
+
+## 📫 Contact
+
+📧 junayd.elahi124@gmail.com  
+🔗 [GitHub](https://github.com/junayd-elahi)  
+🔗 [LinkedIn](https://www.linkedin.com/in/junayd-elahi-2029b9213/)
